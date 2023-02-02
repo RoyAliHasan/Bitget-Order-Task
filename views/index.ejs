@@ -13,9 +13,8 @@
         padding: 0;
       }
       table {
-        width: 50%;
+        width: 100%;
         border-collapse: collapse;
-      
       }
 
       thead {
@@ -108,41 +107,44 @@
     <!-- Input Container Starts here -->
     <div class="inputs">
       <div class="input-1">
-        <h2>Enter Credentials For User 1</h2>
+        <h1 style="color: blue">Enter the Credentials Here:</h1>
         <input
           type="text"
           id="apiKey"
           class="input-field"
           placeholder="Enter ApiKey"
+          required
         />
         <input
           type="text"
           id="secretKey"
           class="input-field"
           placeholder="Enter SecretKey"
+          required
         />
         <input
           type="text"
           id="paraPhrase"
           class="input-field"
           placeholder="Enter ParaPhrase"
+          required
         />
-      <label for="type">Choose Symbol Type</label>
-<select name="type" id="proType"  class="input-field">
-  <option value="USDT">USDT</option>
-  <option value="BRL">BRL</option>
-  <option value="EUR">EUR</option>
-  <option value="ETH">ETH</option>
-  <option value="BTC">BTC</option>
-  <option value="USDC">USDC</option>
-</select>
+        <label for="type" style="color: blue"><b>Choose Symbol Type</b></label>
+        <select name="type" id="proType" class="input-field">
+          <option value="USDT">USDT</option>
+          <option value="BRL">BRL</option>
+          <option value="EUR">EUR</option>
+          <option value="ETH">ETH</option>
+          <option value="BTC">BTC</option>
+          <option value="USDC">USDC</option>
+        </select>
       </div>
       <button type="button" class="submit-button" onclick="test()">
-       getData 
+        getData
       </button>
     </div>
     <div class="order-table">
-      <h2 class="text-align: center;">Order Details For User 1</h2>
+      <h1 class="text-align: center;" style="color: red">Order Details</h1>
       <table id="dataTable">
         <thead>
           <tr>
@@ -165,119 +167,49 @@
     </div>
     <br />
     <script>
-      let firstOrder = {};
-      let secondOrder={};
-     function test  () {
+      function test() {
         const apiKey = document.getElementById("apiKey").value;
         const secretKey = document.getElementById("secretKey").value;
         const paraPhrase = document.getElementById("paraPhrase").value;
-        const proType= document.getElementById("proType").value;
-          axios({
-            method: "get",
-            url: "https://sumbol-tracker-app.vercel.app/v1/api/symbols",
-            headers: {
-              "Access-Control-Allow-Methods":
-                "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-              "Access-Control-Allow-Origin": "*",
-              "Content-Type": "application/json",
-            },
-            params: {
-              apiKey: apiKey,
-              secretKey: secretKey,
-              paraPhrase: paraPhrase,
-            },
-          })
-            .then(function (response) {
-              var dataBody = document.getElementById("dataBodyU1");
-               const  items=response.data.data;
-              const result = items.filter(function(item) {
-            return item.quoteCoin == proType;
+        const proType = document.getElementById("proType").value;
+        if (apiKey.length < 10 || secretKey < 10 || paraPhrase.length < 5) {
+          alert("Please Enter the Credentials in Input Fields");
+        }
+        axios({
+          method: "get",
+          url: "https://sumbol-tracker-app.vercel.app/v1/api/symbols",
+          headers: {
+            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+          params: {
+            apiKey: apiKey,
+            secretKey: secretKey,
+            paraPhrase: paraPhrase,
+          },
+        })
+          .then(function (response) {
+            var dataBody = document.getElementById("dataBodyU1");
+            const items = response.data.data;
+            const result = items.filter(function (item) {
+              return item.quoteCoin == proType;
             });
             // console.log(result);
             result.forEach(function (item) {
-                var row = document.createElement("tr");
-                for (var key in item) {
-                  var cell = document.createElement("td");
-                  cell.innerHTML = item[key];
-                  row.appendChild(cell);
-                }
-                dataBody.appendChild(row);
-              });
-            })
-            .catch(function (error) {
-            console.log(error);
+              var row = document.createElement("tr");
+              for (var key in item) {
+                var cell = document.createElement("td");
+                cell.innerHTML = item[key];
+                row.appendChild(cell);
+              }
+              dataBody.appendChild(row);
             });
-      };
-      console.log(firstOrder.orderId);
-      // User 2
-      // submitButton1.addEventListener("click", function () {
-      //   const apiKey1 = document.getElementById("apiKey1").value;
-      //   const secretKey1 = document.getElementById("secretKey1").value;
-      //   const paraPhrase1 = document.getElementById("paraPhrase1").value;
-      //   if (apiKey1.length < 10 || secretKey1 < 10 || paraPhrase1.length < 5) {
-      //     alert("Please Enter the Credentials in Input Fields");
-      //   } else {
-      //     axios({
-      //       method: "get",
-      //       url: "https://cheerful-bikini-ox.cyclic.app/v1/api/u2/order",
-      //       headers: {
-      //         "Access-Control-Allow-Methods":
-      //           "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-      //         "Access-Control-Allow-Origin": "*",
-      //         "Content-Type": "application/json",
-      //       },
-      //       params: {
-      //         apiKey: apiKey1,
-      //         secretKey: secretKey1,
-      //         paraPhrase: paraPhrase1,
-      //         symbol: "TRXUSDT_SPBL",
-      //         orderId: 974792555020390400,
-      //         clientOrderId: 974792554995224576,
-      //       },
-      //     })
-      //       .then(function (response) {
-      //         var dataBody = document.getElementById("dataBodyU2");
-
-      //         response.data.data.forEach(function (item) {
-      //           secondOrder=item
-      //           var row = document.createElement("tr");
-
-      //           for (var key in item) {
-      //             var cell = document.createElement("td");
-      //             cell.innerHTML = item[key];
-      //             row.appendChild(cell);
-      //           }
-
-      //           dataBody.appendChild(row);
-      //         });
-      //       })
-      //       .catch(function (error) {
-      //         alert("Credentials not Correct User:2");
-      //       });
-      //   }
-      // });
-      function getDATA() {
-        fillPrice = firstOrder.fillPrice + "/" + secondOrder.fillPrice;
-        fillQuantity =
-        firstOrder.fillQuantity + "/" + secondOrder.fillQuantity;
-        fillTotalAmount =
-        firstOrder.fillTotalAmount + "/" + secondOrder.fillTotalAmount;
-        fees = firstOrder.fees + "/" + secondOrder.fees;
-       if ( secondOrder.fillPrice==undefined || firstOrder.fillPrice==undefined) {
-        alert("Please put the credentials for Both User")
-        return -1;
-       } else {
-        document
-          .getElementById("showData")
-          .addEventListener("click", function () {
-            document.getElementById("fill").innerHTML = fillPrice;
-            document.getElementById("quantity").innerHTML = fillQuantity;
-            document.getElementById("total").innerHTML = fillTotalAmount;
-            document.getElementById("fee").innerHTML = fees;
+          })
+          .catch(function (error) {
+            console.log(error);
           });
-       }
-       }
-          
+      }
     </script>
   </body>
 </html>
